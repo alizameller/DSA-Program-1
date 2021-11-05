@@ -45,12 +45,6 @@ protected:
         head = head -> next;
         return removedNode;
     };
-    simpleList(string listName, Node* listHead, Node* listTail, int listSize) {
-        name = listName;
-        head = listHead;
-        tail = listTail;
-        size = listSize;
-    };
 
 public:
     string getName() const {
@@ -58,4 +52,8 @@ public:
     };
     virtual void push() = 0;
     virtual Node pop() = 0;
+
+    simpleList(string listName) {
+        name = listName;
+    };
 };
