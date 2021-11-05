@@ -6,7 +6,7 @@ using  std::string;
 
 template <class T>
 
-class SimpleList{
+class simpleList{
 private:
     class Node {
     private:
@@ -14,7 +14,7 @@ private:
         Node* next;
 
     public:
-        T getData(){
+        T getData(){ //might not need this
             return data;
         }
         Node(T x, Node* y) {
@@ -44,6 +44,12 @@ protected:
         Node removedNode = *head;
         head = head -> next;
         return removedNode;
+    };
+    simpleList(string listName, Node* listHead, Node* listTail, int listSize) {
+        name = listName;
+        head = listHead;
+        tail = listTail;
+        size = listSize;
     };
 
 public:
