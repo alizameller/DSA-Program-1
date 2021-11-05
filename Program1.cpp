@@ -55,5 +55,8 @@ public:
 
     simpleList(string listName) {
         name = listName;
+        head = NULL;
+        tail = NULL;
+        size = 0;
     };
 };
