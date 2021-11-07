@@ -18,7 +18,7 @@ private:
             data = val;
         }
 
-        void setNext(Node *ptr) {
+        void setNext(Node* ptr) {
             next = ptr;
         }
 
@@ -27,19 +27,19 @@ private:
             return data;
         }
 
-        Node *getNext() const {
+        Node* getNext() const {
             return next;
         }
 
-        Node(T x, Node *y) {
+        Node(T x, Node* y) {
             data = x;
             next = y;
         }
     };
 
     string name;
-    Node *head;
-    Node *tail;
+    Node* head;
+    Node* tail;
     int size;
 
 protected:
@@ -51,14 +51,15 @@ protected:
 
     virtual void insertEndNode(T val) { //push queue
         Node endNode(val, NULL);
-        tail->next = &endNode;
+        tail->setNext(&endNode);
+       // tail->next = &endNode; //change the next attribute of the node that tail points to, to ...
         tail = &endNode;
         return;
     }
 
     virtual Node removeStartNode() { //pop
         Node removedNode = *head;
-        head = head->next;
+        head = head->getNext();
         return removedNode;
     }
 
@@ -78,6 +79,6 @@ public:
 };
 
 int main (){
-    SimpleList<int> myList('Adin');
+    SimpleList<int> myList("Adin");
   return 0;
 };
