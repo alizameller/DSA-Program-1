@@ -76,9 +76,14 @@ public:
         tail = NULL;
         size = 0;
     };
+
+    void display() {
+        cout << name << endl;
+    }
 };
 
 int main (){
     SimpleList<int> myList("Adin");
-  return 0;
+    myList.display();
+    return 0;
 };
