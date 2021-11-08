@@ -2,6 +2,7 @@
 // Created by Aliza Meller on 11/3/21.
 //
 #include <iostream>
+#include <new>
 using namespace std;
 
 template <class T>
@@ -42,28 +43,38 @@ private:
     Node* tail;
     int size;
 
-protected:
+public:
+//protected:
     virtual void insertStartNode(T val) { //push stack
-        Node startNode(val, head);
-        head = &startNode;
+        Node* startNode = new Node(val, head);
+        head = startNode;
+        if (size == 0) {  //same as !size
+          tail = head;
+        }
+        size = size + 1;
         return;
     }
 
     virtual void insertEndNode(T val) { //push queue
-        Node endNode(val, NULL);
-        tail->setNext(&endNode);
+        Node* endNode = new Node(val, NULL);
+        tail->setNext(endNode);
        // tail->next = &endNode; //change the next attribute of the node that tail points to, to ...
-        tail = &endNode;
+        tail = endNode;
+        if (size == 0) {
+            head = tail;
+        }
+        size = size + 1;
         return;
     }
 
     virtual Node removeStartNode() { //pop
         Node removedNode = *head;
         head = head->getNext();
+        size = size - 1;
         return removedNode;
     }
 
-public:
+//public:
     string getName() const {
         return name;
     };
@@ -77,13 +88,26 @@ public:
         size = 0;
     };
 
-    void display() {
-        cout << name << endl;
+    void displayList() const {
+        cout << "Name of the list is " << name << endl;
+        cout << "Size of the list is " << size << endl;
+        Node* tmpNode = head;
+        int num;
+
+        for (int x = 0; x < size; x++){
+            num = tmpNode->getData();
+            tmpNode = tmpNode->getNext();
+            cout << num << endl;
+        };
     }
 };
 
 int main (){
     SimpleList<int> myList("Adin");
-    myList.display();
+    myList.insertStartNode(2);
+    myList.insertEndNode(3);
+    myList.insertStartNode(4);
+    myList.insertStartNode(5);
+    myList.displayList();
     return 0;
 };
