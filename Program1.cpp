@@ -4,8 +4,6 @@
 #include <iostream>
 #include <new>
 #include <fstream>
-#include <vector>
-#include <iterator>
 using namespace std;
 
 template <typename T> //class T?
