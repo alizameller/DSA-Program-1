@@ -3,9 +3,12 @@
 //
 #include <iostream>
 #include <new>
+#include <fstream>
+#include <vector>
+#include <iterator>
 using namespace std;
 
-template <class T>
+template <typename T> //class T?
 class SimpleList {
 private:
     class Node {
@@ -43,8 +46,7 @@ private:
     Node* tail;
     int size;
 
-public:
-//protected:
+protected:
     virtual void insertStartNode(T val) { //push stack
         Node* startNode = new Node(val, head);
         head = startNode;
@@ -74,19 +76,19 @@ public:
         return removedNode;
     }
 
-//public:
+public:
     string getName() const {
         return name;
     };
-   // virtual void push() = 0;
-   // virtual Node pop() = 0;
+   virtual void push(T val) = 0;
+   virtual T pop() = 0;
 
     SimpleList(string listName) {
         name = listName;
         head = NULL;
         tail = NULL;
         size = 0;
-    };
+    }
 
     void displayList() const {
         cout << "Name of the list is " << name << endl;
@@ -101,13 +103,69 @@ public:
         };
     }
 };
+template <typename T>
+class Stack:public SimpleList<T>{
+public:
+    Stack(string listName): SimpleList<T>(listName){
+
+    };
+    void push(T val) {
+        this->insertStartNode(val);
+    };
+    T pop(){
+      return this->removeStartNode().getData();
+    };
+};
+template <typename T>
+class Queue:public SimpleList<T> {
+public:
+    Queue(string listName): SimpleList<T>(listName){
+
+    };
+    Queue queue(string listName);
+    void push(T val) {
+        this->insertEndNode(val);
+    };
+    T pop(){
+        return this->removeStartNode().getData();
+    };
+};
 
 int main (){
-    SimpleList<int> myList("Adin");
-    myList.insertStartNode(2);
-    myList.insertEndNode(3);
-    myList.insertStartNode(4);
-    myList.insertStartNode(5);
-    myList.displayList();
-    return 0;
+    string inputFileName;
+    string outputFileName;
+    cout << "Enter name of input file: " << endl;
+    cin >> inputFileName;
+    cout << "Enter name of output file: " << endl;
+    cin >> outputFileName;
+
+    string line;
+    ifstream inFile(inputFileName);
+    ofstream outFile(outputFileName);
+    while (getline(inFile, line)){
+        outFile << "PROCESSING COMMAND: " << line << endl;
+
+    };
+    outFile.close();
+
+    //prompt user for input file and output file
+    //read input file
+    //loop to parse through the entire file line by line
+        //display processing message
+        //if first word is create, read third word and create respective list
+            //if list already exists, display error message
+            //if list does not exist, create list
+        //if first word is push, check if the list exists
+            //if not, display error message
+            //if yes, read value (second word) and read list (third word), push to respective list
+        //if first word is pop, check if list exists
+            //if not, display error message
+            //if yes, check if list is empty
+                //if yes, display error message
+                //if not, pop from respective list and display "Value Popped" message
+
+    //Stack<int> myList("Adin");
+    //myList.push(2);
+    //myList.displayList();
+    //return 0;
 };
