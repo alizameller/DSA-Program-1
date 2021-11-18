@@ -130,40 +130,54 @@ public:
 };
 
 int main (){
+    ifstream inFile;
+    ofstream outFile;
     string inputFileName;
     string outputFileName;
+
     cout << "Enter name of input file: " << endl;
     cin >> inputFileName;
     cout << "Enter name of output file: " << endl;
     cin >> outputFileName;
 
+    inFile.open(inputFileName);
+    outFile.open(outputFileName);
+
     string line;
-    ifstream inFile(inputFileName);
-    ofstream outFile(outputFileName);
-    while (getline(inFile, line)){
-        outFile << "PROCESSING COMMAND: " << line << endl;
+    char* commandWord;
+    char* listName;
+    char* thirdWord;
 
-    };
-    outFile.close();
 
-    //prompt user for input file and output file
-    //read input file
-    //loop to parse through the entire file line by line
+    while (getline(inFile, line)) {
+        cout << "PROCESSING COMMAND: " << line << endl;
+        commandWord = strtok(strdup(line.c_str())," ");
+        listName = strtok(NULL, " ");
+        thirdWord = strtok(NULL, " ");
+        cout << commandWord << endl;
+        cout << listName << endl;
+        cout << thirdWord << endl;
+    }
+        outFile.close();
+
+        //prompt user for input file and output file
+        //read input file
+        //loop to parse through the entire file line by line
         //display processing message
         //if first word is create, read third word and create respective list
-            //if list already exists, display error message
-            //if list does not exist, create list
+        //if list already exists, display error message
+        //if list does not exist, create list
         //if first word is push, check if the list exists
-            //if not, display error message
-            //if yes, read value (second word) and read list (third word), push to respective list
+        //if not, display error message
+        //if yes, read value (second word) and read list (third word), push to respective list
         //if first word is pop, check if list exists
-            //if not, display error message
-            //if yes, check if list is empty
-                //if yes, display error message
-                //if not, pop from respective list and display "Value Popped" message
+        //if not, display error message
+        //if yes, check if list is empty
+        //if yes, display error message
+        //if not, pop from respective list and display "Value Popped" message
 
-    //Stack<int> myList("Adin");
-    //myList.push(2);
-    //myList.displayList();
-    //return 0;
-};
+        //Stack<int> myList("Adin");
+        //myList.push(2);
+        //myList.displayList();
+        return 0;
+    };
