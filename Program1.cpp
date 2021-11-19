@@ -5,6 +5,7 @@
 #include <new>
 #include <fstream>
 #include <list>
+#include <cstring>
 using namespace std;
 
 template <typename T> //class T?
@@ -50,27 +51,26 @@ protected:
         Node* startNode = new Node(val, head);
         head = startNode;
         if (size == 0) {  //same as !size
-          tail = head;
+            tail = head;
         }
         size = size + 1;
         return;
     }
 
-    virtual void insertEndNode(T val) { //push queue
+    virtual void insertEndNode(T val) {
         Node* endNode = new Node(val, NULL);
-        tail->setNext(endNode);
-       // tail->next = &endNode; //change the next attribute of the node that tail points to, to ...
-        tail = endNode;
-        if (size == 0) {
-            head = tail;
+        if (!size++) {
+            head = tail = endNode;
+            return;
         }
-        size = size + 1;
+        tail->setNext(endNode);
+        tail = endNode;
         return;
-    }
+    };
 
     virtual Node removeStartNode() { //pop
         Node removedNode = *head;
-        head = head->getNext();
+        head = removedNode.getNext();
         size = size - 1;
         return removedNode;
     }
@@ -84,8 +84,8 @@ public:
         return size;
     };
 
-   virtual void push(T val) = 0;
-   virtual T pop() = 0;
+    virtual void push(T val) = 0;
+    virtual T pop() = 0;
 
     SimpleList(string listName) {
         name = listName;
@@ -118,7 +118,7 @@ public:
         this->insertStartNode(val);
     };
     T pop(){
-      return this->removeStartNode().getData();
+        return this->removeStartNode().getData();
     };
 };
 
@@ -148,7 +148,7 @@ SimpleList<T>* findList(char* listName, list<SimpleList<T> *> masterList) {
 };
 
 template <typename T>
-void createList(char* listName, list<SimpleList<T> *>* pmasterList, char* thirdWord, ofstream* outFile) {
+void createList(char* listName, list<SimpleList<T> > pmasterList, char* thirdWord, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (pList) {
@@ -167,7 +167,7 @@ void createList(char* listName, list<SimpleList<T> *>* pmasterList, char* thirdW
 }
 
 template <typename T>
-void pushList(char* listName, list<SimpleList<T> *>* pmasterList, T thirdWord, ofstream* outFile) {
+void pushList(char* listName, list<SimpleList<T> > pmasterList, T thirdWord, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (!pList) {
@@ -180,19 +180,20 @@ void pushList(char* listName, list<SimpleList<T> *>* pmasterList, T thirdWord, o
 }
 
 template <typename T>
-void popList(char *listName, list<SimpleList<T> *>* pmasterList, ofstream* outFile) {
+void popList(char listName, list<SimpleList<T> *> pmasterList, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (!pList) {
         *outFile << "ERROR: This name does not exist!" << endl;
         return ;
     }
-    T val;
-    val = pList->pop();
+
     if (!(pList->getSize())) {
         *outFile << "ERROR: This list is empty!" << endl;
         return;
     }
+    T val;
+    val = pList->pop();
     *outFile << "Value popped: " << val << endl;
     return;
 }
@@ -261,25 +262,6 @@ int main () {
             }
         }
     }
-
     outFile.close();
-
-        //prompt user for input file and output file
-        //read input file
-        //loop to parse through the entire file line by line
-        //display processing message
-        //if first word is create, read third word and create respective list
-            //if list already exists, display error message
-            //if list does not exist, create list
-        //if first word is push, check if the list exists
-            //if not, display error message
-            //if yes, read value (second word) and read list (third word), push to respective list
-        //if first word is pop, check if list exists
-            //if not, display error message
-            //if yes, check if list is empty
-                //if yes, display error message
-                //if not, pop from respective list and display "Value Popped" message
-
-        return 0;
-    };
-
+    return 0;
+};
