@@ -60,9 +60,9 @@ protected:
     virtual void insertEndNode(T val) {
         Node* endNode = new Node(val, NULL);
         if (!size++) {
-            head = tail = endNode;
-            return;
-        }
+             head = tail = endNode;
+             return;
+         }
         tail->setNext(endNode);
         tail = endNode;
         return;
@@ -104,7 +104,7 @@ public:
             num = tmpNode->getData();
             tmpNode = tmpNode->getNext();
             cout << num << endl;
-        };
+        }
     }
 };
 
@@ -148,7 +148,7 @@ SimpleList<T>* findList(char* listName, list<SimpleList<T> *> masterList) {
 };
 
 template <typename T>
-void createList(char* listName, list<SimpleList<T> > pmasterList, char* thirdWord, ofstream* outFile) {
+void createList(char* listName, list<SimpleList<T> *>* pmasterList, char* thirdWord, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (pList) {
@@ -167,7 +167,7 @@ void createList(char* listName, list<SimpleList<T> > pmasterList, char* thirdWor
 }
 
 template <typename T>
-void pushList(char* listName, list<SimpleList<T> > pmasterList, T thirdWord, ofstream* outFile) {
+void pushList(char* listName, list<SimpleList<T> *>* pmasterList, T thirdWord, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (!pList) {
@@ -180,7 +180,7 @@ void pushList(char* listName, list<SimpleList<T> > pmasterList, T thirdWord, ofs
 }
 
 template <typename T>
-void popList(char listName, list<SimpleList<T> *> pmasterList, ofstream* outFile) {
+void popList(char* listName, list<SimpleList<T> *>* pmasterList, ofstream* outFile) {
     SimpleList<T>* pList;
     pList = findList(listName, *pmasterList);
     if (!pList) {
