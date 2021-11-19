@@ -4,6 +4,7 @@
 #include <iostream>
 #include <new>
 #include <fstream>
+#include <list>
 using namespace std;
 
 template <typename T> //class T?
@@ -78,6 +79,11 @@ public:
     string getName() const {
         return name;
     };
+
+    int getSize() const {
+        return size;
+    };
+
    virtual void push(T val) = 0;
    virtual T pop() = 0;
 
@@ -101,8 +107,9 @@ public:
         };
     }
 };
+
 template <typename T>
-class Stack:public SimpleList<T>{
+class Stack:public SimpleList<T> {
 public:
     Stack(string listName): SimpleList<T>(listName){
 
@@ -114,6 +121,7 @@ public:
       return this->removeStartNode().getData();
     };
 };
+
 template <typename T>
 class Queue:public SimpleList<T> {
 public:
@@ -129,55 +137,149 @@ public:
     };
 };
 
-int main (){
+template <typename T>
+SimpleList<T>* findList(char* listName, list<SimpleList<T> *> masterList) {
+    for(auto const& i : masterList) {
+        if (i->getName() == listName){
+            return i;
+        }
+    }
+    return NULL;
+};
+
+template <typename T>
+void createList(char* listName, list<SimpleList<T> *>* pmasterList, char* thirdWord, ofstream* outFile) {
+    SimpleList<T>* pList;
+    pList = findList(listName, *pmasterList);
+    if (pList) {
+        *outFile << "ERROR: This name already exists!" << endl;
+        return;
+    }
+    SimpleList<T>* newList;
+    if (!strcmp(thirdWord, "stack")){
+        newList = new Stack<T> (listName);
+    } else if (!strcmp(thirdWord, "queue")){
+        newList = new Queue<T> (listName);
+    }
+    pmasterList->push_back(newList);
+
+    return;
+}
+
+template <typename T>
+void pushList(char* listName, list<SimpleList<T> *>* pmasterList, T thirdWord, ofstream* outFile) {
+    SimpleList<T>* pList;
+    pList = findList(listName, *pmasterList);
+    if (!pList) {
+        *outFile << "ERROR: This name does not exist!" << endl;
+        return;
+    }
+    pList->push(thirdWord);
+
+    return;
+}
+
+template <typename T>
+void popList(char *listName, list<SimpleList<T> *>* pmasterList, ofstream* outFile) {
+    SimpleList<T>* pList;
+    pList = findList(listName, *pmasterList);
+    if (!pList) {
+        *outFile << "ERROR: This name does not exist!" << endl;
+        return ;
+    }
+    T val;
+    val = pList->pop();
+    if (!(pList->getSize())) {
+        *outFile << "ERROR: This list is empty!" << endl;
+        return;
+    }
+    *outFile << "Value popped: " << val << endl;
+    return;
+}
+
+int main () {
     ifstream inFile;
     ofstream outFile;
     string inputFileName;
     string outputFileName;
 
-    cout << "Enter name of input file: " << endl;
+    cout << "Enter name of input file: ";
     cin >> inputFileName;
-    cout << "Enter name of output file: " << endl;
+    cout << "Enter name of output file: ";
     cin >> outputFileName;
 
     inFile.open(inputFileName);
     outFile.open(outputFileName);
 
     string line;
-    char* commandWord;
-    char* listName;
-    char* thirdWord;
+    char *commandWord;
+    char *listName;
+    char *thirdWord;
 
+    list<SimpleList<int> *> listSLi;
+    list<SimpleList<double> *> listSLd;
+    list<SimpleList<string> *> listSLs;
+
+    int iv;
+    double dv;
+    string sv;
 
     while (getline(inFile, line)) {
-        cout << "PROCESSING COMMAND: " << line << endl;
-        commandWord = strtok(strdup(line.c_str())," ");
+        outFile << "PROCESSING COMMAND: " << line << endl;
+        commandWord = strtok(strdup(line.c_str()), " ");
         listName = strtok(NULL, " ");
         thirdWord = strtok(NULL, " ");
-        cout << commandWord << endl;
-        cout << listName << endl;
-        cout << thirdWord << endl;
+
+        if (!strcmp(commandWord, "create")) {
+            if (listName[0] == 'i') {
+                createList(listName, &listSLi, thirdWord, &outFile);
+            } else if (listName[0] == 'd') {
+                createList(listName, &listSLd, thirdWord, &outFile);
+            } else if (listName[0] == 's') {
+                createList(listName, &listSLs, thirdWord, &outFile);
+            }
+
+        } else if (!strcmp(commandWord, "push")) {
+            if (listName[0] == 'i') {
+                iv = atoi(thirdWord);
+                pushList(listName, &listSLi, iv, &outFile);
+            } else if (listName[0] == 'd') {
+                dv = atof(thirdWord);
+                pushList(listName, &listSLd, dv, &outFile);
+            } else if (listName[0] == 's') {
+                sv = string(thirdWord);
+                pushList(listName, &listSLs, sv, &outFile);
+            }
+
+        } else if (!strcmp(commandWord, "pop")) {
+            if (listName[0] == 'i') {
+                popList(listName, &listSLi, &outFile);
+            } else if (listName[0] == 'd') {
+                popList(listName, &listSLd, &outFile);
+            } else if (listName[0] == 's') {
+                popList(listName, &listSLs, &outFile);
+            }
+        }
     }
-        outFile.close();
+
+    outFile.close();
 
         //prompt user for input file and output file
         //read input file
         //loop to parse through the entire file line by line
         //display processing message
         //if first word is create, read third word and create respective list
-        //if list already exists, display error message
-        //if list does not exist, create list
+            //if list already exists, display error message
+            //if list does not exist, create list
         //if first word is push, check if the list exists
-        //if not, display error message
-        //if yes, read value (second word) and read list (third word), push to respective list
+            //if not, display error message
+            //if yes, read value (second word) and read list (third word), push to respective list
         //if first word is pop, check if list exists
-        //if not, display error message
-        //if yes, check if list is empty
-        //if yes, display error message
-        //if not, pop from respective list and display "Value Popped" message
+            //if not, display error message
+            //if yes, check if list is empty
+                //if yes, display error message
+                //if not, pop from respective list and display "Value Popped" message
 
-        //Stack<int> myList("Adin");
-        //myList.push(2);
-        //myList.displayList();
         return 0;
     };
+
